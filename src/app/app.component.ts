@@ -13,13 +13,14 @@ export class AppComponent {
 
   constructor(private fctrl: FormBuilder) {
     this.form = fctrl.group({
-      codigo: '123',
-      nombre: 'Jhon',
+      codigo: '',
+      nombre: '',
       aficiones: fctrl.group({
-        aficion1: 'musica',
-        aficion2: 'futbol',
+        aficion1: '',
+        aficion2: '',
       }),
     });
+    this.leerDatos();
   }
 
   onSubmit() {
@@ -29,5 +30,33 @@ export class AppComponent {
       'aficiones: ' + JSON.stringify(this.form.controls['aficiones'].value)
     );
     console.log('form ' + JSON.stringify(this.form.value));
+    this.grabarDatos();
+  }
+
+  grabarDatos() {
+    localStorage.setItem('codigo', this.form.controls['codigo'].value);
+    localStorage.setItem('nombre', this.form.controls['nombre'].value);
+    localStorage.setItem(
+      'aficiones',
+      JSON.stringify(this.form.controls['aficiones'].value)
+    );
+  }
+
+  leerDatos() {
+    this.form.patchValue({
+      codigo: localStorage.getItem('codigo')
+        ? localStorage.getItem('codigo')
+        : '',
+    });
+    this.form.patchValue({
+      nombre: localStorage.getItem('nombre')
+        ? localStorage.getItem('nombre')
+        : '',
+    });
+    this.form.patchValue({
+      aficiones: JSON.parse(localStorage.getItem('aficiones')!)
+        ? JSON.parse(localStorage.getItem('aficiones')!)
+        : '',
+    });
   }
 }
